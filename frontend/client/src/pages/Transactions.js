@@ -10,7 +10,7 @@ export default function Transactions() {
   }
 
   function goToLogout() {
-    navigate("/Login");
+    navigate("/");
   }
 
   return (
