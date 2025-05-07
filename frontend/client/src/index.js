@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom"; // Import Routes and Route
 import Login from "./pages/Login";
+import Reports from "./pages/Reports";
 import Transactions from "./pages/Transactions";
 import reportWebVitals from "./reportWebVitals";
 
@@ -11,6 +12,7 @@ root.render(
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/Transactions" element={<Transactions />} />
+      <Route path="/Reports" element={<Reports />} />
     </Routes>
   </BrowserRouter>
 );

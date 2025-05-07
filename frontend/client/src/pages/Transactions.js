@@ -9,6 +9,10 @@ export default function Transactions() {
     navigate("/Reports");
   }
 
+  function goToLogout() {
+    navigate("/Login");
+  }
+
   return (
     <div>
       <div className="sidebar">
