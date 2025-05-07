@@ -11,12 +11,18 @@ export default function Login() {
     console.log("Login Success:", token);
     navigate("/dashboard"); // Redirect to Dashboard
   };
+
+  function goToDashboard() {
+    window.location.href = "/dashboard"; 
+  }
+
   return (
     <div>
          <h1>Financial &<br></br>Acounting</h1>
          <p>User<input type="text"></input></p>
          <p>Password<input type="text"></input></p>
-         <GoogleLogin onSuccess={handleSuccess} onError={() => console.log("Login Failed")} />
+         <button onClick={goToDashboard}>Login</button>
+         //<GoogleLogin onSuccess={handleSuccess} onError={() => console.log("Login Failed")} />
     </div>
   );
 }
