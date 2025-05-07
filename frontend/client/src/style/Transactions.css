@@ -65,7 +65,9 @@ body {
 }
 
 .nav-item:hover, .nav-item.active {
-    background-color: #1C768F;
+    background-color: #FBF3F2;
+    color:#032539;
+    border-radius: 20px 0px 0px 20px;
 }
 
 .logout-btn {
