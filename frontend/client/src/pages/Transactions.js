@@ -35,7 +35,7 @@ export default function Transactions() {
           </div>
         </div>
 
-        <button className="logout-btn">Logout</button>
+        <button onClick={goToLogout} className="logout-btn">Logout</button>
       </div>
 
       <div className="main-content">
