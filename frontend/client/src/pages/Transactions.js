@@ -63,8 +63,37 @@ export default function Transactions() {
         </div>
 
         {/* Blank Section */}
-        <div className="reports-section">
-          <h1 className="section-title">Title Here</h1>
+        <div class="main-content">
+        <h1>Transaction History</h1>
+        <div class="controls">
+          <button class="download-button">Download as...</button>
+          <select class="sort-by">
+            <option value="date">Date</option>
+            <option value="amount">Amount</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice ID</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Expense Category</th>
+              <th>Source</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-list">
+            {/*<!-- Transaction rows will be added here dynamically -->*/}
+          </tbody>
+        </table>
+        <div class="pagination">
+          {/*<!-- Pagination controls -->*/}
+        </div>
         </div>
       </div>
     </div>
