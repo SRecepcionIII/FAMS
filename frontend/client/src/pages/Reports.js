@@ -14,7 +14,7 @@ export default function Transactions() {
   }
 
   return (
-    <div>
+    <div  className="container">
       <div className="sidebar">
         <div className="profile">
           <i className="fas fa-cog settings-icon"></i>

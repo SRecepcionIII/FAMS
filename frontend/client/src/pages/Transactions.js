@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/Transactions.css";
 
@@ -14,7 +13,7 @@ export default function Transactions() {
   }
 
   return (
-    <div>
+    <div className="container">
       <div className="sidebar">
         <div className="profile">
           <i className="fas fa-cog settings-icon"></i>
@@ -63,39 +62,39 @@ export default function Transactions() {
         </div>
 
         {/* Blank Section */}
-        <div class="main-content">
-        <h1>Transaction History</h1>
-        <div class="controls">
-          <button class="download-button">Download as...</button>
-          <select class="sort-by">
-            <option value="date">Date</option>
-            <option value="amount">Amount</option>
-            <option value="status">Status</option>
-          </select>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Invoice ID</th>
-              <th>Amount</th>
-              <th>Type</th>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Expense Category</th>
-              <th>Source</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="transaction-list">
-            {/*<!-- Transaction rows will be added here dynamically -->*/}
-          </tbody>
-        </table>
+        <div class="transaction-section">
+          <h1>Transaction History</h1>
+          <div class="controls">
+            <button class="download-button">Download as...</button>
+            <select class="sort-by">
+              <option value="date">Date</option>
+              <option value="amount">Amount</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice ID</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Expense Category</th>
+                <th>Source</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="transaction-list">
+              {/*<!-- Transaction rows will be added here dynamically -->*/}
+            </tbody>
+          </table>
         <div class="pagination">
           {/*<!-- Pagination controls -->*/}
         </div>
-        </div>
       </div>
     </div>
+  </div>
   );
 }
