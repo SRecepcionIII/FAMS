@@ -139,6 +139,12 @@ body {
     font-size: 18px;
 }
 
+.controls {
+    display: flex;
+    justify-content: right; /* Spread the controls horizontally */
+    align-items: center; /* Align controls vertically */
+}
+
 /* transaction Section */
 .transaction-section {
     flex: 1; /* Allow the transaction section to grow and fill available space */

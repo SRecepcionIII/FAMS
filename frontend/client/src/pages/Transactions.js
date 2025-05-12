@@ -1,8 +1,32 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/Transactions.css";
 
 export default function Transactions() {
   const navigate = useNavigate();
+
+  const [transactions, setTransactions] = useState([
+    {
+      id: 1,
+      amount: "$100",
+      type: "Credit",
+      date: "2023-10-01",
+      description: "Payment for services",
+      category: "Services",
+      source: "Bank Transfer",
+      status: "Completed",
+    },
+    {
+      id: 2,
+      amount: "$200",
+      type: "Debit",
+      date: "2023-10-02",
+      description: "Purchase of goods",
+      category: "Goods",
+      source: "Credit Card",
+      status: "Pending",
+    },
+  ]);
 
   function goToReports() {
     navigate("/Reports");
@@ -11,6 +35,8 @@ export default function Transactions() {
   function goToLogout() {
     navigate("/");
   }
+
+
 
   return (
     <div className="container">
@@ -63,8 +89,10 @@ export default function Transactions() {
 
         {/* Blank Section */}
         <div class="transaction-section">
+          
           <h1>Transaction History</h1>
           <div class="controls">
+            <button class="add-button">+</button>
             <button class="download-button">Download as...</button>
             <select class="sort-by">
               <option value="date">Date</option>
@@ -72,6 +100,7 @@ export default function Transactions() {
               <option value="status">Status</option>
             </select>
           </div>
+          
           <table>
             <thead>
               <tr>
@@ -87,7 +116,21 @@ export default function Transactions() {
               </tr>
             </thead>
             <tbody id="transaction-list">
-              {/*<!-- Transaction rows will be added here dynamically -->*/}
+              {transactions.map((transaction) => (
+                <tr key={transaction.id}>
+                  <td>{transaction.id}</td>
+                  <td>{transaction.amount}</td>
+                  <td>{transaction.type}</td>
+                  <td>{transaction.date}</td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.source}</td>
+                  <td>{transaction.status}</td>
+                  <td>
+                    <button className="action-button">View</button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         <div class="pagination">
