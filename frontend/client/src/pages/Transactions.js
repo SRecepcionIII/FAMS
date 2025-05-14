@@ -49,6 +49,8 @@ export default function Transactions() {
   const [downloadMenu, setDownloadMenu] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editTransaction, setEditTransaction] = useState(null);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -275,7 +277,12 @@ export default function Transactions() {
                   <td>
                     <span className={`status-text ${transaction.status.toLowerCase()}`}>{transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}</span>
                   </td>
-                  <td><span className="action-menu">⋮</span></td>
+                  <td>
+                    <button className="edit-button" title="Edit" onClick={() => {
+                      setEditTransaction(transaction);
+                      setEditModalOpen(true);
+                    }}>🖉</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -356,6 +363,47 @@ export default function Transactions() {
                 setShowDeleteConfirm(false);
               }}>Delete</button>
               <button className="modal-btn cancel" onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {editModalOpen && editTransaction && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="modal-close" onClick={() => setEditModalOpen(false)}>&times;</button>
+            <h2>Edit Transaction</h2>
+            <div className="modal-form">
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <select className="modal-input" style={{ width: '80px', flex: '0 0 80px' }} value={editTransaction.currency || '₱'} onChange={e => setEditTransaction({ ...editTransaction, currency: e.target.value })}>
+                  <option value="₱">₱ PHP</option>
+                  <option value="$">$ USD</option>
+                  <option value="€">€ EUR</option>
+                  <option value="¥">¥ JPY</option>
+                  <option value="£">£ GBP</option>
+                </select>
+                <input className="modal-input" type="number" min="0" step="0.01" placeholder="Amount" value={editTransaction.amount ? editTransaction.amount.replace(/[^\d.]/g, '') : ''} onChange={e => setEditTransaction({ ...editTransaction, amount: e.target.value })} />
+              </div>
+              <input className="modal-input" placeholder="Type" value={editTransaction.type || ''} onChange={e => setEditTransaction({ ...editTransaction, type: e.target.value })} />
+              <input className="modal-input" type="date" value={editTransaction.date || ''} onChange={e => setEditTransaction({ ...editTransaction, date: e.target.value })} />
+              <input className="modal-input" placeholder="Description" value={editTransaction.description || ''} onChange={e => setEditTransaction({ ...editTransaction, description: e.target.value })} />
+              <input className="modal-input" placeholder="Expense Category" value={editTransaction.category || ''} onChange={e => setEditTransaction({ ...editTransaction, category: e.target.value })} />
+              <input className="modal-input" placeholder="Source" value={editTransaction.source || ''} onChange={e => setEditTransaction({ ...editTransaction, source: e.target.value })} />
+              <select className="modal-input" value={editTransaction.status || 'pending'} onChange={e => setEditTransaction({ ...editTransaction, status: e.target.value })}>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div className="modal-actions">
+              <button className="modal-btn add" onClick={() => {
+                setTransactions(transactions.map(t => t.id === editTransaction.id ? {
+                  ...editTransaction,
+                  amount: `${editTransaction.currency || '₱'} ${editTransaction.amount}`
+                } : t));
+                setEditModalOpen(false);
+                setEditTransaction(null);
+              }}>Save</button>
+              <button className="modal-btn cancel" onClick={() => setEditModalOpen(false)}>Cancel</button>
             </div>
           </div>
         </div>
