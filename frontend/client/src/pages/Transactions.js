@@ -95,7 +95,7 @@ export default function Transactions() {
             <button class="add-button">+</button>
             <button class="download-button">Download as...</button>
             <select class="sort-by" >
-              <option value="" disabled selected>Sort-by</option>
+              <option value="" disabled selected>example</option>
               <option value="date">Date</option>
               <option value="amount">Amount</option>
               <option value="status">Status</option>
