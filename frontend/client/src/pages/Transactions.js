@@ -94,7 +94,8 @@ export default function Transactions() {
           <div class="controls">
             <button class="add-button">+</button>
             <button class="download-button">Download as...</button>
-            <select class="sort-by">
+            <select class="sort-by" >
+              <option value="" disabled selected>Sort-by</option>
               <option value="date">Date</option>
               <option value="amount">Amount</option>
               <option value="status">Status</option>
