@@ -443,4 +443,43 @@ body {
 
 .row-selected {
   background: #fff7e0 !important;
+  outline: 2px solid #FA991C !important;
+  outline-offset: -2px;
+  position: relative;
+}
+
+.row-selected td {
+  background-color: #fff7e0 !important;
+}
+
+/* Remove these rules that cause layout shifts */
+.row-selected td:first-child,
+.row-selected td:last-child {
+  border-radius: 0;
+}
+
+.edit-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  background: #1C768F;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0 2px;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+.edit-button:hover {
+  background: #FA991C;
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
 }
