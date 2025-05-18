@@ -29,4 +29,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+// GET /api/activeBudgets
+router.get("/", async (req, res) => {
+  try {
+    const budgets = await ActiveBudget.find();
+    res.json(budgets);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch active budgets" });
+  }
+});
+
 module.exports = router;
