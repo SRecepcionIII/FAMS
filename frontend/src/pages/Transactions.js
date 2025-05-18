@@ -401,7 +401,17 @@ export default function Transactions() {
             <h2>Edit Transaction</h2>
             <div className="modal-form">
               <div style={{ display: 'flex', gap: '8px' }}>
-                <input className="modal-input" type="number" min="0" step="0.01" placeholder="Amount" value={editTransaction.amount ? editTransaction.amount.replace(/[^\d.]/g, '') : ''} onChange={e => setEditTransaction({ ...editTransaction, amount: e.target.value })} />
+                <input
+                  className="modal-input"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Amount"
+                  value={editTransaction.amount ?? ''}
+                  onChange={e =>
+                    setEditTransaction({ ...editTransaction, amount: e.target.value })
+                  }
+                />
               </div>
               <input className="modal-input" placeholder="Type" value={editTransaction.type || ''} onChange={e => setEditTransaction({ ...editTransaction, type: e.target.value })} />
               <input className="modal-input" type="date" value={editTransaction.date || ''} onChange={e => setEditTransaction({ ...editTransaction, date: e.target.value })} />
