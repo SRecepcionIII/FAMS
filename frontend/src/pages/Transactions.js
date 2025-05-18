@@ -63,7 +63,7 @@ export default function Transactions() {
     axios.get(`${API_URL}/transactions`)
       .then(res => setTransactions(res.data))
       .catch(err => console.error(err));
-  }, []);
+  }, [API_URL]); // <-- Add API_URL here
 
   function goToReports() {
     navigate("/Reports");
