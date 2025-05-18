@@ -3,6 +3,7 @@ const router = express.Router();
 const axios = require("axios");
 //const { protect } = require("../middleware/auth");
 const Transaction = require('../models/Transaction');
+const ActiveBudget = require('../models/ActiveBudget');
 
 // Get all transactions
 router.get("/", async (req, res) => {
@@ -36,19 +37,25 @@ router.put("/:id", async (req, res) => {
       updated.status &&
       updated.status.toLowerCase() === "completed"
     ) {
-      const externalUrl = "https://budget-allocation-ij50.onrender.com/api/disbursement";
-      const payload = {
-        amount: updated.amount,
-        category: updated.category,
-        budget_id: updated.id,
-        status: updated.status,
-      };
-      console.log("Attempting to send to external server:", payload);
-      try {
-        const extRes = await axios.post(externalUrl, payload);
-        console.log("External server response:", extRes.status, extRes.data);
-      } catch (externalErr) {
-        console.error("Failed to send to external server:", externalErr.message);
+      // Find the latest active budget (active_status: true)
+      const activeBudget = await ActiveBudget.findOne({ active_status: true });
+      if (!activeBudget) {
+        console.error("No active budget found.");
+      } else {
+        const externalUrl = "https://budget-allocation-ij50.onrender.com/api/disbursement";
+        const payload = {
+          amount: updated.amount,
+          category: updated.category,
+          budget_id: activeBudget.budget_id, // Use the active budget's budget_id
+          status: updated.status,
+        };
+        console.log("Attempting to send to external server:", payload);
+        try {
+          const extRes = await axios.post(externalUrl, payload);
+          console.log("External server response:", extRes.status, extRes.data);
+        } catch (externalErr) {
+          console.error("Failed to send to external server:", externalErr.message);
+        }
       }
     }
 
