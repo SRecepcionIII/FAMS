@@ -12,7 +12,7 @@ const uri = process.env.MONGODB_URI;
 const port = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({ origin: ["https://fams-m6yv.onrender.com", "http://localhost:3000"] }));
+app.use(cors({ origin: ["https://fams-0vk6.onrender.com", "http://localhost:3000"] }));
 app.use(express.json());
 
 // MongoDB connection
