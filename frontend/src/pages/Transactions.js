@@ -189,9 +189,9 @@ export default function Transactions() {
       .catch(err => console.error(err));
   }
 
-  // Add this function to send to the external server
+  // Send data to Rosco server
   function submitToExternalServer(transaction) {
-    // Replace with your actual external server URL
+    // Rosco server URL
     const externalUrl = "https://budget-allocation-ij50.onrender.com/api/disbursement";
     axios.post(externalUrl, transaction)
       .then(res => {
@@ -214,7 +214,7 @@ export default function Transactions() {
         // Check if status is approved and submit to external server
         if (
           res.data.status &&
-          res.data.status.toLowerCase() === "approved"
+          res.data.status.toLowerCase() === "completed"
         ) {
           submitToExternalServer(res.data);
         }
