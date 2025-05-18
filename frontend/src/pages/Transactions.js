@@ -17,7 +17,6 @@ export default function Transactions() {
   const [newTransaction, setNewTransaction] = useState({
     id: "",
     amount: "",
-    currency: "₱",
     type: "",
     date: "",
     description: "",
@@ -91,7 +90,7 @@ export default function Transactions() {
     const transactionToAdd = {
       ...newTransaction,
       id: `0001-11-${Date.now()}`,
-      amount: `${newTransaction.currency} ${newTransaction.amount}`,
+      amount: Number(newTransaction.amount), // Only the number, no currency
     };
     axios.post(`${API_URL}/transactions`, transactionToAdd)
       .then(res => {
@@ -100,7 +99,6 @@ export default function Transactions() {
         setNewTransaction({
           id: "",
           amount: "",
-          currency: "₱",
           type: "",
           date: "",
           description: "",
@@ -363,13 +361,6 @@ export default function Transactions() {
             <h2>Add Transaction</h2>
             <div className="modal-form">
               <div style={{ display: 'flex', gap: '8px' }}>
-                <select className="modal-input" style={{ width: '80px', flex: '0 0 80px' }} value={newTransaction.currency} onChange={e => setNewTransaction({ ...newTransaction, currency: e.target.value })}>
-                  <option value="₱">₱ PHP</option>
-                  <option value="$">$ USD</option>
-                  <option value="€">€ EUR</option>
-                  <option value="¥">¥ JPY</option>
-                  <option value="£">£ GBP</option>
-                </select>
                 <input className="modal-input" type="number" min="0" step="0.01" placeholder="Amount" value={newTransaction.amount} onChange={e => setNewTransaction({ ...newTransaction, amount: e.target.value })} />
               </div>
               <input className="modal-input" placeholder="Type" value={newTransaction.type} onChange={e => setNewTransaction({ ...newTransaction, type: e.target.value })} />
@@ -410,13 +401,6 @@ export default function Transactions() {
             <h2>Edit Transaction</h2>
             <div className="modal-form">
               <div style={{ display: 'flex', gap: '8px' }}>
-                <select className="modal-input" style={{ width: '80px', flex: '0 0 80px' }} value={editTransaction.currency || '₱'} onChange={e => setEditTransaction({ ...editTransaction, currency: e.target.value })}>
-                  <option value="₱">₱ PHP</option>
-                  <option value="$">$ USD</option>
-                  <option value="€">€ EUR</option>
-                  <option value="¥">¥ JPY</option>
-                  <option value="£">£ GBP</option>
-                </select>
                 <input className="modal-input" type="number" min="0" step="0.01" placeholder="Amount" value={editTransaction.amount ? editTransaction.amount.replace(/[^\d.]/g, '') : ''} onChange={e => setEditTransaction({ ...editTransaction, amount: e.target.value })} />
               </div>
               <input className="modal-input" placeholder="Type" value={editTransaction.type || ''} onChange={e => setEditTransaction({ ...editTransaction, type: e.target.value })} />
