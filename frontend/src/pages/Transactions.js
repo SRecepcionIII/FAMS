@@ -9,6 +9,8 @@ import "jspdf-autotable";
 export default function Transactions() {
   const navigate = useNavigate();
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const [transactions, setTransactions] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
@@ -58,7 +60,7 @@ export default function Transactions() {
 
   // Fetch transactions from MongoDB
   useEffect(() => {
-    axios.get("http://localhost:5000/api/transactions")
+    axios.get(`${API_URL}/transactions`)
       .then(res => setTransactions(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -91,7 +93,7 @@ export default function Transactions() {
       id: `0001-11-${Date.now()}`,
       amount: `${newTransaction.currency} ${newTransaction.amount}`,
     };
-    axios.post("http://localhost:5000/api/transactions", transactionToAdd)
+    axios.post(`${API_URL}/transactions`, transactionToAdd)
       .then(res => {
         setTransactions([...transactions, res.data]);
         setShowModal(false);
@@ -178,7 +180,7 @@ export default function Transactions() {
 
   // Delete selected transactions from MongoDB
   function handleDeleteTransactions() {
-    axios.delete("http://localhost:5000/api/transactions", {
+    axios.delete(`${API_URL}/transactions`, {
       data: { ids: selectedRows }
     })
       .then(() => {
@@ -191,14 +193,18 @@ export default function Transactions() {
 
   // Edit transaction in MongoDB
   function handleEditTransactionSave() {
-    axios.put(`http://localhost:5000/api/transactions/${editTransaction.id}`, editTransaction)
-      .then(res => {
-        setTransactions(transactions.map(t => t.id === editTransaction.id ? res.data : t));
-        setEditModalOpen(false);
-        setEditTransaction(null);
-      })
-      .catch(err => console.error(err));
-  }
+  const transactionToSend = {
+    ...editTransaction,
+    amount: Number(editTransaction.amount), // Ensure amount is a number
+  };
+  axios.put(`${API_URL}/transactions/${editTransaction.id}`, transactionToSend)
+    .then(res => {
+      setTransactions(transactions.map(t => t.id === editTransaction.id ? res.data : t));
+      setEditModalOpen(false);
+      setEditTransaction(null);
+    })
+    .catch(err => console.error(err));
+}
 
   return (
     <div className="container">
