@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 //const authRoutes = require("./routes/authRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
+const activeBudgetRoutes = require("./routes/activeBudgetRoutes");
 
 dotenv.config();
 const app = express();
@@ -27,5 +28,6 @@ app.get("/", (req, res) => {
 // Routes
 //app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/activeBudgets", activeBudgetRoutes);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
