@@ -31,15 +31,21 @@ router.put("/:id", async (req, res) => {
     const updated = await Transaction.findOneAndUpdate({ id }, req.body, { new: true });
     if (!updated) return res.status(404).json({ error: "Transaction not found." });
 
-    // If status is "completed", send to external server
+    // If status is "completed", send mapped data to external server
     if (
       updated.status &&
       updated.status.toLowerCase() === "completed"
     ) {
       const externalUrl = "https://budget-allocation-ij50.onrender.com/api/disbursement";
+      const payload = {
+        amount: updated.amount,
+        category: updated.category,
+        budget_id: updated.id,
+        status: updated.status,
+      };
       try {
-        await axios.post(externalUrl, updated);
-        console.log("Transaction sent to external server.");
+        await axios.post(externalUrl, payload);
+        console.log("Transaction sent to external server:", payload);
       } catch (externalErr) {
         console.error("Failed to send to external server:", externalErr.message);
       }
