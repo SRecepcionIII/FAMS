@@ -189,6 +189,20 @@ export default function Transactions() {
       .catch(err => console.error(err));
   }
 
+  // Add this function to send to the external server
+  function submitToExternalServer(transaction) {
+    // Replace with your actual external server URL
+    const externalUrl = "https://budget-allocation-ij50.onrender.com/api/disbursement";
+    axios.post(externalUrl, transaction)
+      .then(res => {
+        alert("Transaction submitted to external server!");
+      })
+      .catch(err => {
+        console.error("External submit error:", err);
+        alert("Failed to submit to external server.");
+      });
+  }
+
   // Edit transaction in MongoDB
   function handleEditTransactionSave() {
     axios.put(`http://localhost:5000/api/transactions/${editTransaction.id}`, editTransaction)
@@ -196,6 +210,14 @@ export default function Transactions() {
         setTransactions(transactions.map(t => t.id === editTransaction.id ? res.data : t));
         setEditModalOpen(false);
         setEditTransaction(null);
+
+        // Check if status is approved and submit to external server
+        if (
+          res.data.status &&
+          res.data.status.toLowerCase() === "approved"
+        ) {
+          submitToExternalServer(res.data);
+        }
       })
       .catch(err => console.error(err));
   }
