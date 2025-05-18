@@ -58,7 +58,7 @@ export default function Transactions() {
 
   // Fetch transactions from MongoDB
   useEffect(() => {
-    axios.get("https://fams-m6yv.onrender.com/api/transactions")
+    axios.get("http://localhost:5000/api/transactions")
       .then(res => setTransactions(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -91,7 +91,7 @@ export default function Transactions() {
       id: `0001-11-${Date.now()}`,
       amount: `${newTransaction.currency} ${newTransaction.amount}`,
     };
-    axios.post("https://fams-m6yv.onrender.com/api/transactions", transactionToAdd)
+    axios.post("http://localhost:5000/api/transactions", transactionToAdd)
       .then(res => {
         setTransactions([...transactions, res.data]);
         setShowModal(false);
@@ -178,7 +178,7 @@ export default function Transactions() {
 
   // Delete selected transactions from MongoDB
   function handleDeleteTransactions() {
-    axios.delete("https://fams-m6yv.onrender.com/api/transactions", {
+    axios.delete("http://localhost:5000/api/transactions", {
       data: { ids: selectedRows }
     })
       .then(() => {
@@ -191,7 +191,7 @@ export default function Transactions() {
 
   // Edit transaction in MongoDB
   function handleEditTransactionSave() {
-    axios.put(`https://fams-m6yv.onrender.com/api/transactions/${editTransaction.id}`, editTransaction)
+    axios.put(`http://localhost:5000/api/transactions/${editTransaction.id}`, editTransaction)
       .then(res => {
         setTransactions(transactions.map(t => t.id === editTransaction.id ? res.data : t));
         setEditModalOpen(false);
