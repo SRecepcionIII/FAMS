@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const axios = require("axios");
 //const { protect } = require("../middleware/auth");
 const Transaction = require('../models/Transaction');
 
@@ -33,17 +34,14 @@ router.put("/:id", async (req, res) => {
     // If status is "completed", send to external server
     if (
       updated.status &&
-      updated.status.toLowerCase() === "Completed"
+      updated.status.toLowerCase() === "completed"
     ) {
-      // Replace with your actual external server URL
       const externalUrl = "https://budget-allocation-ij50.onrender.com/api/disbursement";
       try {
         await axios.post(externalUrl, updated);
-        // Optionally log or handle the response
         console.log("Transaction sent to external server.");
       } catch (externalErr) {
         console.error("Failed to send to external server:", externalErr.message);
-        // Optionally, you can return an error or just log it
       }
     }
 
