@@ -13,7 +13,7 @@ app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect('mongodb+srv://srecepcioniii:<db_password>@cluster0.v9n5j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {  
+mongoose.connect('mongodb+srv://srecepcioniii:vFzyaOlJ4jLQ9ylk@cluster0.v9n5j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {  
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
