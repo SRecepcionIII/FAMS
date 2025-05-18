@@ -16,10 +16,7 @@ app.use(cors({ origin: ["https://fams-m6yv.onrender.com", "http://localhost:3000
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(uri, {  
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(uri)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log(err));
 
