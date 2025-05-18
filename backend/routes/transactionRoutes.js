@@ -43,9 +43,10 @@ router.put("/:id", async (req, res) => {
         budget_id: updated.id,
         status: updated.status,
       };
+      console.log("Attempting to send to external server:", payload);
       try {
-        await axios.post(externalUrl, payload);
-        console.log("Transaction sent to external server:", payload);
+        const extRes = await axios.post(externalUrl, payload);
+        console.log("External server response:", extRes.status, extRes.data);
       } catch (externalErr) {
         console.error("Failed to send to external server:", externalErr.message);
       }
@@ -53,6 +54,7 @@ router.put("/:id", async (req, res) => {
 
     res.json(updated);
   } catch (err) {
+    console.error("Failed to update transaction:", err);
     res.status(500).json({ error: "Failed to update transaction." });
   }
 });
