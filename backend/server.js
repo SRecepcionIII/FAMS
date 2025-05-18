@@ -28,15 +28,4 @@ app.get("/", (req, res) => {
 //app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 
-app.get('/api/transactions', async (req, res) => {
-  const transactions = await Transaction.find();
-  res.json(transactions);
-});
-
-app.post('/api/transactions', async (req, res) => {
-  const transaction = new Transaction(req.body);
-  await transaction.save();
-  res.json(transaction);
-});
-
 app.listen(port, () => console.log(`Server running on port ${port}`));
