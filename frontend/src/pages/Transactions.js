@@ -366,7 +366,16 @@ export default function Transactions() {
               <input className="modal-input" placeholder="Type" value={newTransaction.type} onChange={e => setNewTransaction({ ...newTransaction, type: e.target.value })} />
               <input className="modal-input" type="date" value={newTransaction.date} onChange={e => setNewTransaction({ ...newTransaction, date: e.target.value })} />
               <input className="modal-input" placeholder="Description" value={newTransaction.description} onChange={e => setNewTransaction({ ...newTransaction, description: e.target.value })} />
-              <input className="modal-input" placeholder="Expense Category" value={newTransaction.category} onChange={e => setNewTransaction({ ...newTransaction, category: e.target.value })} />
+              <select
+                className="modal-input"
+                value={newTransaction.category}
+                onChange={e => setNewTransaction({ ...newTransaction, category: e.target.value })}
+              >
+                <option value="">Select Category</option>
+                <option value="PS">PS</option>
+                <option value="CO">CO</option>
+                <option value="MOOE">MOOE</option>
+              </select>
               <input className="modal-input" placeholder="Source" value={newTransaction.source} onChange={e => setNewTransaction({ ...newTransaction, source: e.target.value })} />
               <select className="modal-input" value={newTransaction.status} onChange={e => setNewTransaction({ ...newTransaction, status: e.target.value })}>
                 <option value="pending">Pending</option>
@@ -416,7 +425,16 @@ export default function Transactions() {
               <input className="modal-input" placeholder="Type" value={editTransaction.type || ''} onChange={e => setEditTransaction({ ...editTransaction, type: e.target.value })} />
               <input className="modal-input" type="date" value={editTransaction.date || ''} onChange={e => setEditTransaction({ ...editTransaction, date: e.target.value })} />
               <input className="modal-input" placeholder="Description" value={editTransaction.description || ''} onChange={e => setEditTransaction({ ...editTransaction, description: e.target.value })} />
-              <input className="modal-input" placeholder="Expense Category" value={editTransaction.category || ''} onChange={e => setEditTransaction({ ...editTransaction, category: e.target.value })} />
+              <select
+                className="modal-input"
+                value={editTransaction.category || ''}
+                onChange={e => setEditTransaction({ ...editTransaction, category: e.target.value })}
+              >
+                <option value="">Select Category</option>
+                <option value="PS">PS</option>
+                <option value="CO">CO</option>
+                <option value="MOOE">MOOE</option>
+              </select>
               <input className="modal-input" placeholder="Source" value={editTransaction.source || ''} onChange={e => setEditTransaction({ ...editTransaction, source: e.target.value })} />
               <select className="modal-input" value={editTransaction.status || 'pending'} onChange={e => setEditTransaction({ ...editTransaction, status: e.target.value })}>
                 <option value="pending">Pending</option>
