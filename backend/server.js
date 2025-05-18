@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: "https://fams-m6yv.onrender.com" }));
+app.use(cors({ origin: ["https://fams-m6yv.onrender.com", "http://localhost:3000"] }));
 app.use(express.json());
 
 // MongoDB connection
