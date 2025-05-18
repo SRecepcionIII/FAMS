@@ -12,8 +12,8 @@ router.post("/", async (req, res) => {
     const { budget_id } = req.body;
     if (!budget_id) return res.status(400).json({ error: "budget_id is required" });
 
-    // Set all previous active_status to false for this budget_id
-    await ActiveBudget.updateMany({ budget_id }, { active_status: false });
+    // Set all previous active_status to false for all budgets
+    await ActiveBudget.updateMany({}, { active_status: false });
 
     // Create new active budget (latest is true)
     const activeBudget = new ActiveBudget({
