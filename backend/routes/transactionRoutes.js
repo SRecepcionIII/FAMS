@@ -25,9 +25,32 @@ router.delete("/", async (req, res) => {
 
 // Edit a transaction
 router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const updated = await Transaction.findOneAndUpdate({ id }, req.body, { new: true });
-  res.json(updated);
+  try {
+    const { id } = req.params;
+    const updated = await Transaction.findOneAndUpdate({ id }, req.body, { new: true });
+    if (!updated) return res.status(404).json({ error: "Transaction not found." });
+
+    // If status is "completed", send to external server
+    if (
+      updated.status &&
+      updated.status.toLowerCase() === "Completed"
+    ) {
+      // Replace with your actual external server URL
+      const externalUrl = "https://budget-allocation-ij50.onrender.com/api/disbursement";
+      try {
+        await axios.post(externalUrl, updated);
+        // Optionally log or handle the response
+        console.log("Transaction sent to external server.");
+      } catch (externalErr) {
+        console.error("Failed to send to external server:", externalErr.message);
+        // Optionally, you can return an error or just log it
+      }
+    }
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update transaction." });
+  }
 });
 
 module.exports = router;
