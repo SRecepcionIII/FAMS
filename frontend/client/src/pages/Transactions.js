@@ -1,35 +1,15 @@
-import { useState, useEffect } from "react";
+import { jsPDF } from "jspdf";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/Transactions.css";
-import { jsPDF } from "jspdf";
 
+import axios from "axios";
 import "jspdf-autotable";
 
 export default function Transactions() {
   const navigate = useNavigate();
 
-  const [transactions, setTransactions] = useState([
-    {
-      id: "0001-11-22",
-      amount: "₱ 100,000.00",
-      type: "",
-      date: "03/14/02",
-      description: "Lorem Ipsum...",
-      category: "",
-      source: "",
-      status: "pending",
-    },
-    {
-      id: 2,
-      amount: "$200",
-      type: "Debit",
-      date: "2023-10-02",
-      description: "Purchase of goods",
-      category: "Goods",
-      source: "Credit Card",
-      status: "Pending",
-    },
-  ]);
+  const [transactions, setTransactions] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
   const [newTransaction, setNewTransaction] = useState({
@@ -76,6 +56,13 @@ export default function Transactions() {
     }
   }, [showModal]);
 
+  // Fetch transactions from MongoDB
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/transactions")
+      .then(res => setTransactions(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
   function goToReports() {
     navigate("/Reports");
   }
@@ -84,23 +71,46 @@ export default function Transactions() {
     navigate("/");
   }
 
+  // Add transaction to MongoDB
   function handleAddTransaction() {
-    setTransactions([
-      ...transactions,
-      { ...newTransaction, id: `0001-11-${transactions.length + 22}`, amount: `${newTransaction.currency} ${newTransaction.amount}` },
-    ]);
-    setShowModal(false);
-    setNewTransaction({
-      id: "",
-      amount: "",
-      currency: "₱",
-      type: "",
-      date: "",
-      description: "",
-      category: "",
-      source: "",
-      status: "pending",
-    });
+    // Simple validation
+    if (
+      !newTransaction.amount ||
+      !newTransaction.type ||
+      !newTransaction.date ||
+      !newTransaction.description ||
+      !newTransaction.category ||
+      !newTransaction.source
+    ) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    const transactionToAdd = {
+      ...newTransaction,
+      id: `0001-11-${Date.now()}`,
+      amount: `${newTransaction.currency} ${newTransaction.amount}`,
+    };
+    axios.post("http://localhost:5000/api/transactions", transactionToAdd)
+      .then(res => {
+        setTransactions([...transactions, res.data]);
+        setShowModal(false);
+        setNewTransaction({
+          id: "",
+          amount: "",
+          currency: "₱",
+          type: "",
+          date: "",
+          description: "",
+          category: "",
+          source: "",
+          status: "pending",
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to add transaction. See console for details.");
+      });
   }
 
   function handleDownloadPDF() {
@@ -166,6 +176,30 @@ export default function Transactions() {
     e.target.selectedIndex = 0;
   }
 
+  // Delete selected transactions from MongoDB
+  function handleDeleteTransactions() {
+    axios.delete("http://localhost:5000/api/transactions", {
+      data: { ids: selectedRows }
+    })
+      .then(() => {
+        setTransactions(transactions.filter(t => !selectedRows.includes(t.id)));
+        setSelectedRows([]);
+        setShowDeleteConfirm(false);
+      })
+      .catch(err => console.error(err));
+  }
+
+  // Edit transaction in MongoDB
+  function handleEditTransactionSave() {
+    axios.put(`http://localhost:5000/api/transactions/${editTransaction.id}`, editTransaction)
+      .then(res => {
+        setTransactions(transactions.map(t => t.id === editTransaction.id ? res.data : t));
+        setEditModalOpen(false);
+        setEditTransaction(null);
+      })
+      .catch(err => console.error(err));
+  }
+
   return (
     <div className="container">
       <div className="sidebar">
@@ -222,7 +256,7 @@ export default function Transactions() {
             <div className="controls">
               <button className="add-button" onClick={() => setShowModal(true)}>+</button>
               {selectedRows.length > 0 && (
-                <button className="delete-button" onClick={() => setShowDeleteConfirm(true)} title="Delete selected">
+                <button className="modal-btn add" onClick={handleDeleteTransactions}>
                   🗑️
                 </button>
               )}
@@ -357,11 +391,7 @@ export default function Transactions() {
             <h2>Delete Transactions</h2>
             <p>Are you sure you want to delete the selected transaction(s)? This action cannot be undone.</p>
             <div className="modal-actions">
-              <button className="modal-btn add" onClick={() => {
-                setTransactions(transactions.filter(t => !selectedRows.includes(t.id)));
-                setSelectedRows([]);
-                setShowDeleteConfirm(false);
-              }}>Delete</button>
+              <button className="modal-btn add" onClick={handleDeleteTransactions}>Delete</button>
               <button className="modal-btn cancel" onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
             </div>
           </div>
@@ -395,14 +425,7 @@ export default function Transactions() {
               </select>
             </div>
             <div className="modal-actions">
-              <button className="modal-btn add" onClick={() => {
-                setTransactions(transactions.map(t => t.id === editTransaction.id ? {
-                  ...editTransaction,
-                  amount: `${editTransaction.currency || '₱'} ${editTransaction.amount}`
-                } : t));
-                setEditModalOpen(false);
-                setEditTransaction(null);
-              }}>Save</button>
+              <button className="modal-btn add" onClick={handleEditTransactionSave}>Save</button>
               <button className="modal-btn cancel" onClick={() => setEditModalOpen(false)}>Cancel</button>
             </div>
           </div>

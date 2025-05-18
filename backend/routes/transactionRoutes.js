@@ -1,39 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const { protect } = require("../middleware/auth");
-const Transaction = require("../models/Transaction");
+//const { protect } = require("../middleware/auth");
+const Transaction = require('../models/Transaction');
 
-// Get all transactions for a user
-router.get("/", protect, async (req, res) => {
-  try {
-    const transactions = await Transaction.find({ user: req.user._id });
-    res.json(transactions);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
+// Get all transactions
+router.get("/", async (req, res) => {
+  const transactions = await Transaction.find();
+  res.json(transactions);
 });
 
-// Create a transaction (and update account balance)
-router.post("/", protect, async (req, res) => {
-  const { amount, type, category, accountId } = req.body;
-  const session = await mongoose.startSession();
-  session.startTransaction();
-  try {
-    const transaction = await Transaction.create(
-      [{ ...req.body, user: req.user._id, account: accountId }],
-      { session }
-    );
-    const account = await Account.findById(accountId).session(session);
-    account.balance += type === "income" ? amount : -amount;
-    await account.save({ session });
-    await session.commitTransaction();
-    res.status(201).json(transaction);
-  } catch (error) {
-    await session.abortTransaction();
-    res.status(400).json({ message: error.message });
-  } finally {
-    session.endSession();
-  }
+// Add a transaction
+router.post("/", async (req, res) => {
+  const transaction = new Transaction(req.body);
+  await transaction.save();
+  res.json(transaction);
+});
+
+// Delete transactions by IDs
+router.delete("/", async (req, res) => {
+  const { ids } = req.body; // expects { ids: [id1, id2, ...] }
+  await Transaction.deleteMany({ id: { $in: ids } });
+  res.json({ success: true });
+});
+
+// Edit a transaction
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const updated = await Transaction.findOneAndUpdate({ id }, req.body, { new: true });
+  res.json(updated);
 });
 
 module.exports = router;

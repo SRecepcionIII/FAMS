@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema({
-  amount: { type: Number, required: true },
-  type: { type: String, enum: ["income", "expense"], required: true },
-  category: { type: String, required: true },
-  date: { type: Date, default: Date.now },
+  id: String,
+  amount: String,
+  currency: String,
+  type: String,
+  date: String,
   description: String,
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  account: { type: mongoose.Schema.Types.ObjectId, ref: "Account", required: true },
+  category: String,
+  source: String,
+  status: String,
 });
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+// Prevent OverwriteModelError in watch mode
+module.exports = mongoose.models.Transaction || mongoose.model("Transaction", transactionSchema);
